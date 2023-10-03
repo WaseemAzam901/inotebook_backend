@@ -17,7 +17,7 @@ const validateUser = [
   body("password").isString().notEmpty().isLength({ min: 5 }),
 ];
 
-// Creating User Using Post and making function asynch takay hum jab data base main koi record dalain yeh serach karay toh program wait na karay
+// Route 1 Creating User Using Post and making function asynch takay hum jab data base main koi record dalain yeh serach karay toh program wait na karay
 
 router.post("/createuser", validateUser, async (req, res) => {
   const errors = validationResult(req);
@@ -42,32 +42,54 @@ router.post("/createuser", validateUser, async (req, res) => {
       password: secPass,
       email: req.body.email,
     });
+    // Jwt main phelay hum user ka data detay hain takreeban jesay uski id etc wo cheezain jo unique ho 
     const data = {
       user: {
         id: user.id
       }
     }
+    // ab hum us user ki id waghera ko sign kardetay hain apnay string say 
     const authtoken = jwt.sign(data, JWT_SECRET);
 
     // res.json(user);
-    res.json(authtoken);
+    res.json({authtoken});
   }// agar try run nahi huwa due to error toh catch run hoga aur console main error print karay gah aur response main some error occured kar de gah aur status code  500 set kar de gah jis ka matlab error hota hai
    catch (error) {
     console.error(error.message);
-    res.status(500).send("some Error Occured");
+    res.status(500).send("Internal Server Error");
   }
+});
+ // Route 2 Login Authentication matlab user login karay gah is route say
+  router.post("/login", [body("email").isEmail(),
+                         body('password', 'Password cannot be blank').exists()], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      // If there are validation errors, send a response with the errors
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const {email, password} = req.body;
+    try {
+      let user = await User.findOne({email});
+      if(!user){
+        return res.status(400).json({ error: "Please Enter the correct credential" });
+      }
+      const passwordCompare = await bcrypt.compare(password, user.password);
+      if (!passwordCompare) {
+        return res.status(400).json({error: "Please Enter the correct credential" });
+      }
+      const data = {
+        user:{
+          id: user.id
+        }
+      }
+      const authtoken = jwt.sign(data, JWT_SECRET);
+      res.json({authtoken});
 
-  // .then(user => res.json(user))
-
-  // .then(user => res.json(user)) // phela user parameter hai
-  // .catch(err=> {console.log(err)
-  // res.json ({error: 'Please enter a unique value for email'})}) // yahn error key hai object ki aur '' k under likhi wali cheez value
-
-  // res.send(req.body);
-  // console.log(req.body);
-  // const user = User(req.body);
-  // user.save();
-  // res.send(req.body);
+      
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Internal Server Error");
+    }
 });
 
 module.exports = router;
