@@ -5,6 +5,9 @@ const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const fetchuser = require("../middleware/fetchuser")
+
+
 
 const JWT_SECRET = "sadhughiujpojnhbbvhgiuhlhvhhbhywdasdnbhbkjhbkkkkkkkkkkkkkkkkkkkkkdjsabdnbghjbavbndbabmdvbah";
 
@@ -45,7 +48,7 @@ router.post("/createuser", validateUser, async (req, res) => {
     // Jwt main phelay hum user ka data detay hain takreeban jesay uski id etc wo cheezain jo unique ho 
     const data = {
       user: {
-        id: user.id
+        id: user.id,
       }
     }
     // ab hum us user ki id waghera ko sign kardetay hain apnay string say 
@@ -79,7 +82,7 @@ router.post("/createuser", validateUser, async (req, res) => {
       }
       const data = {
         user:{
-          id: user.id
+          id: user.id,
         }
       }
       const authtoken = jwt.sign(data, JWT_SECRET);
@@ -91,5 +94,23 @@ router.post("/createuser", validateUser, async (req, res) => {
       res.status(500).send("Internal Server Error");
     }
 });
+ // Route 3 User Detail Fetch hogi uskay jwt token say  matlab user login karay gah is route say
+ // aur yahn fetchuser eik middle ware hai matlab hum isko is tarhan jis bhi route main rakhay gy router.post('/getuser',fetchuser , async (req, res) toh yeh us route k execute honay say phelay khud execute hoga aur jesay hi middle ware ka process complete honay k baad end hoga tab hi route main jo function define hai i.e async (req, res) execute hoga
+  router.post('/getuser',fetchuser , async (req, res) => {
+    try {
+      userId = req.user.id;
+      // id main say wo id find karo jo userId main hai aur hum kyu k essay find karnay k baad uski koi bhi feild access kar saktay hain toh hum kaha k hum password - kartay hain matlab essa karnay say ab hum password wali feild access nahi kar payein gy
+      const user = await User.findById(userId).select("-password")
+      res.send(user)
+
+      
+    } catch (error) {
+      
+    }
+  })
+
+
+
+
 
 module.exports = router;

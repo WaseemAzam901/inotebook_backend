@@ -1,0 +1,21 @@
+var jwt = require('jsonwebtoken')
+
+const JWT_SECRET = "sadhughiujpojnhbbvhgiuhlhvhhbhywdasdnbhbkjhbkkkkkkkkkkkkkkkkkkkkkdjsabdnbghjbavbndbabmdvbah";
+
+// yeh eik middle ware hai yeh hota function hi hai bus yeh req, res, and next leta hai aur yeh jis route main dalain us route k execution say phelay execute hots hai
+const fetchuser = (req,res,next)=> {
+    // hum header main say token nikalain gy yahn means token fetch hoga header say aur header ka name hoga auth-token, aur video wala keh raha hai k wo request bhejay gah auth-token k naam say hi ap is ka thora matlab hi ,ujhe samaj aaya hai pura nahi
+    const token = req.header('auth-token');
+    if(!token){
+        req.status(401).send({error: "Please provide token in header"})
+    }
+    try {
+        const data = jwt.verify(token, JWT_SECRET);
+        console.log(data);
+        req.user = data.user;
+    } catch (error) {
+        req.status(401).send({error: "Please provide token in header "})
+    }
+    next();
+}
+module.exports =fetchuser;
