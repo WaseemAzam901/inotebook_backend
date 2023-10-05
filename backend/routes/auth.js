@@ -99,13 +99,17 @@ router.post("/createuser", validateUser, async (req, res) => {
   router.post('/getuser',fetchuser , async (req, res) => {
     try {
       userId = req.user.id;
+      console.log(userId);
       // id main say wo id find karo jo userId main hai aur hum kyu k essay find karnay k baad uski koi bhi feild access kar saktay hain toh hum kaha k hum password - kartay hain matlab essa karnay say ab hum password wali feild access nahi kar payein gy
-      const user = await User.findById(userId).select("-password")
+      let user = await User.findById(userId).select("-password")
       res.send(user)
+      console.log(user)
+
 
       
     } catch (error) {
-      
+      console.error(error.message);
+      res.status(500).send("Internal Server Error");
     }
   })
 
