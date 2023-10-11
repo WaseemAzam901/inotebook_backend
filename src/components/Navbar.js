@@ -5,9 +5,9 @@ const Navbar = () => {
 
 // is say humain pata chal jata hai k hum kis route per hain jesay / per yeh /home per simply location.pathname ab issay hum use kar k link active karay gay
 let location = useLocation();
-useEffect(() => {
- console.log(location.pathname);
-}, [location]);   
+// useEffect(() => {
+//  console.log(location.pathname);
+// }, [location]);   
   return (
 
 <nav className="navbar navbar-expand-lg bg-dark navbar-dark">
