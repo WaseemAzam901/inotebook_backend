@@ -6,17 +6,17 @@ const { body, validationResult } = require("express-validator");
 
 
 
-// Route 1 fetching all notes of user  /api/notes/fetchallnotes and making function asynch takay hum jab data base main koi record dalain yeh serach karay toh program wait karay
-router.get('/fetchallnotes',fetchuser,async (req, res) => {
-    const notes = await Note.find({user: req.user.id})
-    res.json(notes)
-})
+// // Route 1 fetching all notes of user  /api/notes/fetchallnotes and making function asynch takay hum jab data base main koi record dalain yeh serach karay toh program wait karay
+// router.get('/fetchallnotes',fetchuser,async (req, res) => {
+//     const notes = await Note.find({user: req.user.id})
+//     res.json(notes)
+// })
 
 
 // Route 1 fetching all notes of user  /api/notes/fetchallnotes and making function asynch takay hum jab data base main koi record dalain yeh serach karay toh program wait karay
 router.get('/fetchallnotes',fetchuser,async (req, res) => {
     try {
-        const notes = await Note.find({chooser: req.user.id})
+        const notes = await Note.find({user: req.user.id})
         res.json(notes)
     } catch (error) {
         console.error(error.message);

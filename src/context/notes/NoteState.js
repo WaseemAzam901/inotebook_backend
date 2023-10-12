@@ -64,17 +64,17 @@ const NoteState = (props)=> {
     }
 
     // Delete  Notes
-    const deleteNote =(id)=> {
+    const deleteNote =async(id)=> {
 
-      // const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
-      //   method: "DELETE", 
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjUxZTZmMTc5NjFmMGUzZGY1YTZkZDZjIn0sImlhdCI6MTY5Njg1NTkyMH0.lDq-tevibz6Eg1gQrFIpkZpUWNeyNkb2DlNLGSTyz0E",
-      //   },
-      // });
-      // const json = await response.json();
-      // console.log(json) 
+      const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
+        method: "DELETE", 
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjUxZTZmMTc5NjFmMGUzZGY1YTZkZDZjIn0sImlhdCI6MTY5Njg1NTkyMH0.lDq-tevibz6Eg1gQrFIpkZpUWNeyNkb2DlNLGSTyz0E",
+        },
+      });
+      const json = await response.json();
+      console.log(json) 
 
       console.log("note has been deleted");
       setNotes(notes.filter((note=> {return note._id !== id})))
