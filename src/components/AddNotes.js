@@ -34,10 +34,11 @@ const AddNotes = () => {
             <label htmlFor="description">Description</label>
             <input type="text" className="form-control" id="description" name='description' placeholder="Enter Description" onChange={onChange}/>
           </div>
-          <div className="form-check my-2">
-            <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
-            <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
+          <div className="form-group my-2">
+            <label htmlFor="tag">Tag</label>
+            <input type="text" className="form-control" id="tag" name='tag' placeholder="Enter Tag" onChange={onChange}/>
           </div>
+          
           <button type="submit" className="btn btn-primary my-3" onClick={handleClick}>Submit</button>
         </form>
       </div>
