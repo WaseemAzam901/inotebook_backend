@@ -24,16 +24,18 @@ const validateUser = [
 
 router.post("/createuser", validateUser, async (req, res) => {
   const errors = validationResult(req);
+  let status = false;
   if (!errors.isEmpty()) {
     // If there are validation errors, send a response with the errors
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({status, errors: errors.array() });
   }
   // try aur catch ko use kar rahay hainn takay agar koi error aye toh catch ho jaye
   try {
     // checking whether an email exist in database already aur agar exist karti hai toh naya user nahi banay gah 
     let user = await User.findOne({ email: req.body.email });
+    
     if (user) {
-      return res.status(400).json({ error: "Email Already Exist" });
+      return res.status(400).json({status, error: "Email Already Exist" });
     }
     const salt = await bcrypt.genSalt(10);
     const secPass = await bcrypt.hashSync(req.body.password, salt);
@@ -55,7 +57,8 @@ router.post("/createuser", validateUser, async (req, res) => {
     const authtoken = jwt.sign(data, JWT_SECRET);
 
     // res.json(user);
-    res.json({authtoken});
+    status = true;
+    res.json({status, authtoken});
   }// agar try run nahi huwa due to error toh catch run hoga aur console main error print karay gah aur response main some error occured kar de gah aur status code  500 set kar de gah jis ka matlab error hota hai
    catch (error) {
     console.error(error.message);
@@ -65,10 +68,12 @@ router.post("/createuser", validateUser, async (req, res) => {
  // Route 2 Login Authentication matlab user login karay gah is route say
   router.post("/login", [body("email").isEmail(),
                          body('password', 'Password cannot be blank').exists()], async (req, res) => {
+    let success = false; 
+    let mes = "";                     
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       // If there are validation errors, send a response with the errors
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({success, errors: errors.array() });
     }
     const {email, password} = req.body;
     try {
@@ -78,15 +83,16 @@ router.post("/createuser", validateUser, async (req, res) => {
       }
       const passwordCompare = await bcrypt.compare(password, user.password);
       if (!passwordCompare) {
-        return res.status(400).json({error: "Please Enter the correct credential" });
+        return res.status(400).json({success, error: "Please Enter the correct credential" });
       }
       const data = {
         user:{
           id: user.id,
         }
       }
+      success = true;
       const authtoken = jwt.sign(data, JWT_SECRET);
-      res.json({authtoken});
+      res.json({success, authtoken});
 
       
     } catch (error) {

@@ -19,8 +19,7 @@ const NoteState = (props)=> {
           "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjUxZTZmMTc5NjFmMGUzZGY1YTZkZDZjIn0sImlhdCI6MTY5Njg1NTkyMH0.lDq-tevibz6Eg1gQrFIpkZpUWNeyNkb2DlNLGSTyz0E",
         },
       });
-      const json = await response.json();
-      console.log(json) 
+      const json = await response.json(); 
       setNotes(json);
       
     }
@@ -46,19 +45,18 @@ const NoteState = (props)=> {
         body: JSON.stringify({title, description, tag}), 
       });
       // response.json(): The response from the server is returned by the fetch function. In this code, the response is assumed to be in JSON format. response.json() is an asynchronous method that reads the response body to completion and returns a promise that resolves with the result of parsing the body text as JSON.
-      const json = response.json(); 
-      
+      const note = await response.json(); 
       //  Adding Note Code For client side
-      console.log(description);
-      const note = [    {
-        "_id": "6523f79e75057f66c73ff0f1d",
-        "user": "651e6f17961f0e3df5a6dd6c",
-        "title": title,
-        "description": description,
-        "tag": tag,
-        "date": "2023-10-09T12:52:46.209Z",
-        "__v": 0
-      }]
+      // const note = [    {
+      //   "_id": "6523f79e75057f66c73ff0f1d",
+      //   "user": "651e6f17961f0e3df5a6dd6c",
+      //   "title": title,
+      //   "description": description,
+      //   "tag": tag,
+      //   // "date": "2023-10-09T12:52:46.209Z",
+      //   "__v": 0
+      // }]
+
       // yahn hum keh rahay hain k notes state jo k eik array hai us main add karo note aur concat jo function hai wo eik array return karta hai aur is naye array main jis main note (note matlab jo naya note user ny add karwaya hai wo is main hoga note naam k variable main) ussay hum change kar dein gy state setNotes ki madad say 
       setNotes(notes.concat(note))
     }
@@ -74,42 +72,52 @@ const NoteState = (props)=> {
         },
       });
       const json = await response.json();
-      console.log(json) 
 
-      console.log("note has been deleted");
       setNotes(notes.filter((note=> {return note._id !== id})))
     }
-
+    
     // Edit a Note
     const editNote = async(id, title, description, tag)=> {
       //API
       //fetch(url, options): The fetch function is a modern JavaScript API for making network requests (HTTP requests). It takes at least one argument, the URL of the resource you want to fetch. In your code, you're sending a POST request to the url specified.
       const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        method: "PUT", // *GET, POST, PUT, DELETE, etc.
         //headers: { "Content-Type": "application/json" }: HTTP headers provide additional information about the request or response, and they are sent as key-value pairs. In this case, you're specifying that the request body contains JSON data.
         headers: {
           "Content-Type": "application/json",
-          "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjUxZDEwNjc2ZThkOWIxZTA1YTg1MmEyIn0sImlhdCI6MTY5NjQwMzU1OX0.yE8s-fjcsVfRs9p1FPugzn1YnhfbKChy4oq-XM9icbg",
+          "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjUxZTZmMTc5NjFmMGUzZGY1YTZkZDZjIn0sImlhdCI6MTY5NzE4MTU2OH0.LIM_uRHy6tfx2Do16Z5__xuVcMJTqyAJjVTJe8KrowQ",
         },
         //body: JSON.stringify(data): The body property contains the data you want to send to the server. Before sending the data, it is converted to a JSON string using JSON.stringify(). This is necessary because the fetch API expects the body data to be a string.
-        body: JSON.stringify({title, description, tag}), 
+        body: JSON.stringify({id, title, description, tag}),
+        // body: abc, 
       });
       // response.json(): The response from the server is returned by the fetch function. In this code, the response is assumed to be in JSON format. response.json() is an asynchronous method that reads the response body to completion and returns a promise that resolves with the result of parsing the body text as JSON.
-      const json =  response.json(); 
+      const json = await response.json(); 
 
       //Logic to edit in client side
+
+      // yahn hum apnay notes (jo k state hai) uski eik copy bana rahay hain aur wo is liye kyu k hum state ko direct update nahi kar saktay toh is liye hum phelay state ki copy banaye gain phir hum us copy ko update karain gy phir ussi copy o setNotes ko pass kar dein gy takay hamari actual state notes bhi Update ho jaye 
+      let newNotes = JSON.parse(JSON.stringify(notes))
+      // acha hum yahn eik aur kaam bhi kar saktay thay k hum notes ki jagah neechay ki do line main bhi newNotes daal saktay thay matlab phir for loop phir newNotes ki lenght tak chalta aur kyu k newNotes exact coopy hai notes ki toh yeh method bhi theek hota yeni hum essa kar saktay thay for (let index = 0; index < newNotes.length; index++) { const element = newNotes[index];
       for (let index = 0; index < notes.length; index++) {
         const element = notes[index];
         if (element._id === id) {
-          element.title = title;
-          element.description = description;
-          element.tag = tag;
+          newNotes[index].title = title;
+          newNotes[index].description = description;
+          newNotes[index].tag = tag;
+          break;
         }
         
       }
+      setNotes(newNotes);
 
       
     }
+
+
+
+
+    
 
 
 
