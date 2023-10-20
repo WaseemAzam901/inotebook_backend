@@ -28,7 +28,6 @@ const Note = () => {
   const updateNote =(currentNote)=>{
     ref.current.click()
     setNote({eid: currentNote._id,etitle: currentNote.title, edescription: currentNote.description, etag: currentNote.tag})
-    aContext.showAlert("Text Converted To Upper Case", "success");
     // console.log(aContext.allu)
   }
 
@@ -40,6 +39,7 @@ setNote({...note, [e.target.name]: e.target.value})
 const handleClick = (e) => {
   editNote(note.eid, note.etitle, note.edescription, note.etag);
   refClose.current.click();
+  aContext.showAlert("Successfully Updated The Note", "success");
   setNote({eid: "",etitle: "", edescription: "", etag: ""})
 
   e.preventDefault();

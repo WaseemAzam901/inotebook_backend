@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 // import { unstable_HistoryRouter } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import alertContext from '../context/notes/alertContext';
+
 
 const Login = () => {
 
   const [credentials, setCredentials] = useState({email: "",password: "" })
   const host = "http://127.0.0.1:5000";
   let navigate = useNavigate();
+  const lContext = useContext(alertContext)
   // let history = unstable_HistoryRouter
   const onChange = (e) => {
     setCredentials({...credentials, [e.target.name]: e.target.value})
@@ -36,9 +39,10 @@ const Login = () => {
         // save the auth token in local storage and then redirect
         localStorage.setItem('token', responseData.authtoken)
         navigate("/")
+        lContext.showAlert("Login Successfully", "success");
       }
       else{
-      alert("Invalid Credential")
+      lContext.showAlert("Enter the Correct Credential", "danger");
       }
     }
 
