@@ -8,12 +8,21 @@ import NoteState from "./context/notes/NoteState";
 import Alert from "./components/Alert";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
+import AlertState from "./context/notes/AlertState";
+import alertContext from "./context/notes/alertContext";
+import React, { useContext } from "react";
+
 function App() {
+ const context = useContext(alertContext)
+  // console.log(context.allu)
+  // console.log(context.alert.msg)
+  // const allu = Context ? Context.allu : null;
+  // const allu = Context.alert;
   return (
     <NoteState>
       <Router>
         <Navbar />
-        <Alert message="this is amazing react course"/>
+        <Alert alert={context.alert}/>
         <div className="container">
           <Routes>
             <Route exact path="/" element={<Home />} />

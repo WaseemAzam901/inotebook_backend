@@ -3,9 +3,11 @@ import noteContext from "../context/notes/noteContext";
 import Noteitem from "./Noteitem";
 import AddNotes from "./AddNotes";
 import { useEffect } from "react";
+import alertContext from "../context/notes/alertContext";
 
 const Note = () => {
   const context = useContext(noteContext);
+  const aContext = useContext(alertContext);
   // This line is using object destructuring to extract properties from the context object. It's equivalent to: 
   //const notes = context.notes;
   //const getNotes = context.getNotes;
@@ -26,6 +28,8 @@ const Note = () => {
   const updateNote =(currentNote)=>{
     ref.current.click()
     setNote({eid: currentNote._id,etitle: currentNote.title, edescription: currentNote.description, etag: currentNote.tag})
+    aContext.showAlert("Text Converted To Upper Case", "success");
+    // console.log(aContext.allu)
   }
 
 

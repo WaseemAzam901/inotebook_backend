@@ -2,12 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import alertContext from './context/notes/alertContext';
+import AlertState from './context/notes/AlertState';
+
+
 // import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <AlertState>
     <App />
+    </AlertState>
   </React.StrictMode>
 );
 

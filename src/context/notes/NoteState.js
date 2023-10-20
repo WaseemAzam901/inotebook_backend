@@ -72,7 +72,7 @@ const NoteState = (props)=> {
         },
       });
       const json = await response.json();
-
+      console.log(json)
       setNotes(notes.filter((note=> {return note._id !== id})))
     }
     
@@ -93,7 +93,7 @@ const NoteState = (props)=> {
       });
       // response.json(): The response from the server is returned by the fetch function. In this code, the response is assumed to be in JSON format. response.json() is an asynchronous method that reads the response body to completion and returns a promise that resolves with the result of parsing the body text as JSON.
       const json = await response.json(); 
-
+      console.log(json)
       //Logic to edit in client side
 
       // yahn hum apnay notes (jo k state hai) uski eik copy bana rahay hain aur wo is liye kyu k hum state ko direct update nahi kar saktay toh is liye hum phelay state ki copy banaye gain phir hum us copy ko update karain gy phir ussi copy o setNotes ko pass kar dein gy takay hamari actual state notes bhi Update ho jaye 
